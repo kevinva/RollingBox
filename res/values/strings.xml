@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, StartActivity!</string>
+    <string name="app_name">Rolling Box</string>
+    <string name="start_button_text">Start Game</string>
+    <string name="exit_button_text">Exit Game</string>
+    <string name="title_textview_text">Welcome to Rolling Box</string>
+    <string name="about_button_text">About Us</string>
+    <string name="quit_dialog_title">Quit</string>
+    <string name="quit_dialog_message">Are you sure you want to quit?</string>
+    <string name="quit_dailog_confirm_yes">YES</string>
+    <string name="quit_dialog_confirm_no">NO</string>
+    <string name="back_button_title">Back</string>
+    <string name="not_allow_move_text">Not allow</string>
+    <string name="dialog_level_clear_message">Succeed</string>
+    <string name="dialog_level_retry_button">Retry</string>
+    <string name="dialog_level_next_button">Next</string>
+</resources>
