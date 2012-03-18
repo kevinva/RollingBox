@@ -126,21 +126,18 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
 	}	
 
 	
-	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
 		// TODO Auto-generated method stub
 		System.out.println("surfaceChanged");
 	}
 
-	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		// TODO Auto-generated method stub
 		System.out.println("surfaceCreated");
 		this.gameViewDrawThread.start();
 	}
 
-	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		// TODO Auto-generated method stub
 		System.out.println("surfaceDestroyed");

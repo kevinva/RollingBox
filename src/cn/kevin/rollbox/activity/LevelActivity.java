@@ -116,7 +116,6 @@ public class LevelActivity extends Activity implements OnGestureListener, OnClic
 		return this.detector.onTouchEvent(event);
 	}
 
-	@Override
 	public boolean onDown(MotionEvent e) {
 		// TODO Auto-generated method stub
 		System.out.println("onDown");
@@ -125,7 +124,6 @@ public class LevelActivity extends Activity implements OnGestureListener, OnClic
 
 	
 	
-	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {
 		// TODO Auto-generated method stub
@@ -157,14 +155,12 @@ public class LevelActivity extends Activity implements OnGestureListener, OnClic
 		return false;
 	}
 
-	@Override
 	public void onLongPress(MotionEvent e) {
 		// TODO Auto-generated method stub
 		System.out.println("onLongPress");
 
 	}
 
-	@Override
 	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
 			float distanceY) {
 		// TODO Auto-generated method stub
@@ -172,21 +168,18 @@ public class LevelActivity extends Activity implements OnGestureListener, OnClic
 		return true;
 	}
 
-	@Override
 	public void onShowPress(MotionEvent e) {
 		// TODO Auto-generated method stub
 		System.out.println("onShowPress");
 
 	}
 
-	@Override
 	public boolean onSingleTapUp(MotionEvent e) {
 		// TODO Auto-generated method stub
 		System.out.println("onSingleTapUp");
 		return true;
 	}
 
-	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		Button clicked  = (Button)v;

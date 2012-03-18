@@ -40,7 +40,6 @@ public class StartActivity extends Activity implements OnClickListener{
 
     }
 
-	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch(v.getId()){
@@ -55,7 +54,6 @@ public class StartActivity extends Activity implements OnClickListener{
 			.setMessage(R.string.quit_dialog_message)
 			.setPositiveButton(R.string.quit_dailog_confirm_yes, new DialogInterface.OnClickListener() {
 				
-				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
 					finish();
@@ -63,7 +61,6 @@ public class StartActivity extends Activity implements OnClickListener{
 			})
 			.setNegativeButton(R.string.quit_dialog_confirm_no, new DialogInterface.OnClickListener() {
 				
-				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// TODO Auto-generated method stub
 					dialog.dismiss();
