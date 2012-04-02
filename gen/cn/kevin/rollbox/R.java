@@ -82,10 +82,15 @@ public final class R {
     }
     public static final class raw {
         public static final int level_1=0x7f050000;
-        public static final int level_2=0x7f050001;
-        public static final int level_3=0x7f050002;
-        public static final int level_4=0x7f050003;
-        public static final int level_5=0x7f050004;
+        public static final int level_1_conf=0x7f050001;
+        public static final int level_2=0x7f050002;
+        public static final int level_2_conf=0x7f050003;
+        public static final int level_3=0x7f050004;
+        public static final int level_3_conf=0x7f050005;
+        public static final int level_4=0x7f050006;
+        public static final int level_4_conf=0x7f050007;
+        public static final int level_5=0x7f050008;
+        public static final int level_5_conf=0x7f050009;
     }
     public static final class string {
         public static final int about_button_text=0x7f060005;

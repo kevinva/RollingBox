@@ -29,4 +29,12 @@ public class MapList {
 		R.raw.level_4,
 		R.raw.level_5
 	};
+	
+	public static int[] mapsConfig = new int[]{
+		R.raw.level_1_conf,
+		R.raw.level_2_conf,
+		R.raw.level_3_conf,
+		R.raw.level_4_conf,
+		R.raw.level_5_conf
+	};
 }

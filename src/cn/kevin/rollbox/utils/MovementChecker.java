@@ -122,6 +122,41 @@ public class MovementChecker {
 		return true;
 	}
 	
+	//是否触碰了圆形开关
+	public boolean moveToRoundSwitch(){
+		Box box = this.gameActivity.box;
+		int[] rows = box.getRows();
+		int[] cols = box.getCols();
+		ArrayList<String[]> currentMap = this.gameActivity.currentMap;
+		String[] line1 = currentMap.get(rows[0]);
+		String[] line2 = currentMap.get(rows[1]);
+		if(line1[cols[0]].equals("2") || line1[cols[1]].equals("2") || line2[cols[0]].equals("2") || line2[cols[1]].equals("2")){
+			return true;
+		}
+		return false;
+	}
+	
+	//是否触碰了X型开关
+	public boolean moveToXSwitch(){
+		Box box = this.gameActivity.box;
+		int[] rows = box.getRows();
+		int[] cols = box.getCols();
+		ArrayList<String[]> currentMap = this.gameActivity.currentMap;
+		String[] line1 = currentMap.get(rows[0]);
+		String[] line2 = currentMap.get(rows[1]);
+		if(box.getState() == Constants.BOX_STATE_VERTICAL){
+			if(line1[cols[0]].equals("3") || line1[cols[1]].equals("3") || line2[cols[0]].equals("3") || line2[cols[1]].equals("3")){
+				return true;
+			}else{
+				return false;
+			}			
+		}else{
+			return false;
+		}
+		
+	}
+	
+	/*
 	public boolean canMove(int boxState, int direction){
 		boolean flag = true;
 		Box box = this.gameActivity.box;
@@ -253,5 +288,6 @@ public class MovementChecker {
 		return flag;
 			
 	}
+	*/
 
 }

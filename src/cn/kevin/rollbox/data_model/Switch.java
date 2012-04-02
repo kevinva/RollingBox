@@ -4,14 +4,14 @@ public class Switch {
 	
 	private int row;
 	private int col;
-	private int type;
 	private boolean isPressed;
+	private Bridge brige;
 	
-	public Switch(int i, int j, int t, boolean flag){
+	public Switch(int i, int j, boolean flag, Bridge b){
 		this.row = i;
 		this.col = j;
-		this.type = t;
-		isPressed = flag;
+		this.isPressed = flag;
+		this.brige = b;
 	}
 
 	public int getRow() {
@@ -30,14 +30,6 @@ public class Switch {
 		this.col = col;
 	}
 
-	public int getType() {
-		return type;
-	}
-
-	public void setType(int type) {
-		this.type = type;
-	}
-
 	public boolean isPressed() {
 		return isPressed;
 	}
@@ -45,6 +37,15 @@ public class Switch {
 	public void setPressed(boolean isPressed) {
 		this.isPressed = isPressed;
 	}
+
+	public Bridge getBrige() {
+		return brige;
+	}
+
+	public void setBrige(Bridge brige) {
+		this.brige = brige;
+	}
+	
 	
 	
 }

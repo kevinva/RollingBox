@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 import cn.kevin.rollbox.R;
 import cn.kevin.rollbox.utils.Constants;
+import cn.kevin.rollbox.utils.MovementChecker;
 import cn.kevin.rollbox.view.GameView;
 
 public class GameViewDrawThread extends Thread {
@@ -32,21 +33,21 @@ public class GameViewDrawThread extends Thread {
 			//System.out.println("outer loop");
 			if(direction == Constants.DIRECTION_UP){
 				if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_VERTICAL){
-					this.refreshCanvas(Constants.box_y_z_up, false);
+					this.rollingBox(Constants.box_y_z_up, false);
 					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_Z);
 					
 					tempRows[0]--;
 					tempRows[1] -= 2;	
 					
 				}else if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_HORIZONTAL_X){
-					this.refreshCanvas(Constants.box_x_up, false);
+					this.rollingBox(Constants.box_x_up, false);
 					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_X);
 					
 					tempRows[0]--;
 					tempRows[1]--;	
 					
 				}else if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_HORIZONTAL_Z){
-					this.refreshCanvas(Constants.box_y_z_down, true);
+					this.rollingBox(Constants.box_y_z_down, true);
 					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_VERTICAL);
 					
 					if(tempRows[0] < tempRows[1]){
@@ -58,16 +59,20 @@ public class GameViewDrawThread extends Thread {
 					}
 					
 				}
+				
+				if(MovementChecker.getInstance(this.gameView.gameActivity).moveToRoundSwitch()){
+					
+				}
 			}else if(direction == Constants.DIRECTION_LEFT){
 				if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_VERTICAL){
-					this.refreshCanvas(Constants.box_y_x_left, false);
+					this.rollingBox(Constants.box_y_x_left, false);
 					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_X);
 					
 					tempCols[0]--;
 					tempCols[1] -= 2;	
 					
 				}else if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_HORIZONTAL_X){
-					this.refreshCanvas(Constants.box_y_x_right, true);
+					this.rollingBox(Constants.box_y_x_right, true);
 					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_VERTICAL);
 					
 					if(tempCols[0] < tempCols[1]){
@@ -79,7 +84,7 @@ public class GameViewDrawThread extends Thread {
 					}	
 					
 				}else if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_HORIZONTAL_Z){
-					this.refreshCanvas(Constants.box_z_left, false);
+					this.rollingBox(Constants.box_z_left, false);
 					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_Z);
 					
 					tempCols[0]--;
@@ -88,21 +93,21 @@ public class GameViewDrawThread extends Thread {
 				}
 			}else if(direction == Constants.DIRECTION_DOWN){
 				if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_VERTICAL){
-					this.refreshCanvas(Constants.box_y_z_down, false);
+					this.rollingBox(Constants.box_y_z_down, false);
 					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_Z);
 					
 					tempRows[0]++;
 					tempRows[1] += 2;	
 					
 				}else if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_HORIZONTAL_X){
-					this.refreshCanvas(Constants.box_x_up, true);
+					this.rollingBox(Constants.box_x_up, true);
 					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_X);
 					
 					tempRows[0]++;
 					tempRows[1]++;
 					
 				}else if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_HORIZONTAL_Z){
-					this.refreshCanvas(Constants.box_y_z_up, true);
+					this.rollingBox(Constants.box_y_z_up, true);
 					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_VERTICAL);
 					
 					if(tempRows[0] < tempRows[1]){
@@ -116,14 +121,14 @@ public class GameViewDrawThread extends Thread {
 				}
 			}else if(direction == Constants.DIRECTION_RIGHT){
 				if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_VERTICAL){
-					this.refreshCanvas(Constants.box_y_x_right, false);
+					this.rollingBox(Constants.box_y_x_right, false);
 					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_X);
 					
 					tempCols[0]++;
 					tempCols[1] += 2;
 					
 				}else if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_HORIZONTAL_X){
-					this.refreshCanvas(Constants.box_y_x_left, true);
+					this.rollingBox(Constants.box_y_x_left, true);
 					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_VERTICAL);
 					
 					if(tempCols[0] < tempCols[1]){
@@ -135,7 +140,7 @@ public class GameViewDrawThread extends Thread {
 					}
 					
 				}else if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_HORIZONTAL_Z){
-					this.refreshCanvas(Constants.box_z_left, true);
+					this.rollingBox(Constants.box_z_left, true);
 					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_Z);
 					
 					tempCols[0]++;
@@ -162,7 +167,7 @@ public class GameViewDrawThread extends Thread {
 				}
 			}
 			
-			System.out.println("Box:" + this.gameView.gameActivity.box);
+			//System.out.println("Box:" + this.gameView.gameActivity.box);
 			
 			//胜利过关
 			if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_VERTICAL &&
@@ -180,7 +185,7 @@ public class GameViewDrawThread extends Thread {
 		}		
 	}
 	
-	private void refreshCanvas(int[] bitmaps, boolean invert){
+	private void rollingBox(int[] bitmaps, boolean invert){
 		Canvas canvas;
 		for(int i = 0; i < bitmaps.length; i++){
 			//System.out.println("inner loop");
@@ -211,6 +216,7 @@ public class GameViewDrawThread extends Thread {
 		}
 		this.direction = -1; //每次翻动之后direction都归-1
 		
+		System.out.println("Box:" + this.gameView.gameActivity.box);
 	}
 
 	public boolean isFlag() {

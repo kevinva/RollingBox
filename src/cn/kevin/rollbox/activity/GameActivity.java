@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -18,7 +19,9 @@ import android.view.WindowManager;
 import android.widget.Toast;
 import cn.kevin.rollbox.R;
 import cn.kevin.rollbox.data_model.Box;
+import cn.kevin.rollbox.data_model.Bridge;
 import cn.kevin.rollbox.data_model.Switch;
+import cn.kevin.rollbox.data_model.Tuple;
 import cn.kevin.rollbox.utils.Constants;
 import cn.kevin.rollbox.utils.MapList;
 import cn.kevin.rollbox.utils.MovementChecker;
@@ -34,6 +37,8 @@ public class GameActivity extends Activity implements OnGestureListener{
 	public Box box;
 	public ArrayList<String[]> currentMap;
 	public ArrayList<Switch> switchList;
+	public HashMap<Switch, Bridge> swtichBridge;
+	
 	public Handler mHandler = new Handler(){
 		
 		public void handleMessage(Message msg){
@@ -54,6 +59,7 @@ public class GameActivity extends Activity implements OnGestureListener{
 		if(bundle != null){
 			this.detector = new GestureDetector(this);
 			this.currentMapIndex = bundle.getInt(Constants.KEY_MAP_INDEX);
+			this.swtichBridge = new HashMap<Switch, Bridge>();
 			
 			System.out.println("current map index: " + currentMapIndex);
 			
@@ -63,8 +69,10 @@ public class GameActivity extends Activity implements OnGestureListener{
 	}
 	
 	private void initGameView(int index){
+		this.swtichBridge.clear();
 		this.movementChecker = MovementChecker.getInstance(this);
 		this.currentMap = this.loadMaps(index);
+		this.loadConfig(index);
 		this.box = new Box();
 		this.initBox();
 		gameView = new GameView(this);
@@ -88,12 +96,28 @@ public class GameActivity extends Activity implements OnGestureListener{
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}finally{
+				try {
+					is.close();
+					reader.close();
+					br.close();
+					is = null;
+					reader = null;
+					br = null;
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				
 			}
 			
 			
 			for(String[] row: list){
 				for(int j = 0; j < row.length; j++){
 					System.out.print(row[j] + " ");
+					
+					
 				}
 				System.out.println();
 			}		
@@ -102,6 +126,64 @@ public class GameActivity extends Activity implements OnGestureListener{
 		}
 		return null;
 	
+	}
+	
+	private void loadConfig(int index){
+		if(index < MapList.mapsConfig.length){
+			if(this.currentMap != null){
+				InputStream is = this.getResources().openRawResource(MapList.mapsConfig[index]);
+				InputStreamReader reader = new InputStreamReader(is);
+				BufferedReader br = new BufferedReader(reader);
+				String line = null;
+
+				try{
+					while((line = br.readLine()) != null){						
+						String[] temp = line.split(":");
+						if(temp.length == 2){
+							if(temp[0].equals("Switch")){
+								this.buildSwitchAndBridges(temp[1]);
+							}
+						}
+					}
+					
+					System.out.println("SwitchBridge count: " + this.swtichBridge.size());
+				}catch(IOException e){
+					e.printStackTrace();
+				}finally{
+					try {
+						is.close();
+						reader.close();
+						br.close();
+						is = null;
+						reader = null;
+						br = null;
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+
+	}
+	
+	private void buildSwitchAndBridges(String conf){
+		String[] temp = conf.split("->");
+		if(temp.length == 2){			
+			String[] bridges = temp[1].split("\\|");			
+			ArrayList<Tuple> tuples = new ArrayList<Tuple>();
+			for(int i = 0; i < bridges.length; i++){
+				String[] bridgePosition = bridges[i].split(",");					
+				Tuple t = new Tuple(Integer.parseInt(bridgePosition[0]), Integer.parseInt(bridgePosition[1]));
+				tuples.add(t);
+			}
+			Bridge bridge = new Bridge(tuples);		
+			
+			String[] switchPosition = temp[0].split(",");
+			Switch s = new Switch(Integer.parseInt(switchPosition[0]), Integer.parseInt(switchPosition[1]), false, bridge);
+			
+			this.swtichBridge.put(s, bridge);
+		}
 	}
 	
 	/*
