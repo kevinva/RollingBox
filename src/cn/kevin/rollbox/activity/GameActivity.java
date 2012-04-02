@@ -24,9 +24,7 @@ import cn.kevin.rollbox.utils.MapList;
 import cn.kevin.rollbox.utils.MovementChecker;
 import cn.kevin.rollbox.view.GameView;
 
-public class GameActivity extends Activity implements OnGestureListener{
-
-	
+public class GameActivity extends Activity implements OnGestureListener{	
 
 	private GameView gameView;
 	private GestureDetector detector;
@@ -55,7 +53,8 @@ public class GameActivity extends Activity implements OnGestureListener{
 		Bundle bundle = this.getIntent().getExtras();
 		if(bundle != null){
 			this.detector = new GestureDetector(this);
-			this.currentMapIndex = bundle.getInt(LevelActivity.KEY_MAP_INDEX);
+			this.currentMapIndex = bundle.getInt(Constants.KEY_MAP_INDEX);
+			
 			System.out.println("current map index: " + currentMapIndex);
 			
 			initGameView(currentMapIndex);
@@ -105,6 +104,7 @@ public class GameActivity extends Activity implements OnGestureListener{
 	
 	}
 	
+	/*
 	private ArrayList<Switch> getSwitch(){
 		ArrayList<Switch> list = new ArrayList<Switch>();		
 		int rows = currentMap.size();
@@ -123,6 +123,7 @@ public class GameActivity extends Activity implements OnGestureListener{
 		}
 		return list;
 	}
+	*/
 	
 	private void initBox(){
 		int rows = currentMap.size();
@@ -162,29 +163,30 @@ public class GameActivity extends Activity implements OnGestureListener{
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {
 		// TODO Auto-generated method stub
+
 		if(e1.getX() - e2.getX() < -60){
-			if(this.movementChecker.canMove(this.box.getState(), Constants.DIRECTION_RIGHT)){
+			if(this.movementChecker.canMove_v2(this.box.getState(), Constants.DIRECTION_RIGHT)){
 				System.out.println("right");
 				this.gameView.gameViewDrawThread.setDirection(Constants.DIRECTION_RIGHT);
 			}else{
 				Toast.makeText(this, R.string.not_allow_move_text, 800).show();
 			}
 		}else if(e1.getX() - e2.getX() > 60){
-			if(this.movementChecker.canMove(this.box.getState(), Constants.DIRECTION_LEFT)){
+			if(this.movementChecker.canMove_v2(this.box.getState(), Constants.DIRECTION_LEFT)){
 				System.out.println("left");
 				this.gameView.gameViewDrawThread.setDirection(Constants.DIRECTION_LEFT);
 			}else{
 				Toast.makeText(this, R.string.not_allow_move_text, 800).show();
 			}
 		}else if(e1.getY() - e2.getY() < -60){
-			if(this.movementChecker.canMove(this.box.getState(), Constants.DIRECTION_DOWN)){
+			if(this.movementChecker.canMove_v2(this.box.getState(), Constants.DIRECTION_DOWN)){
 				System.out.println("down");
 				this.gameView.gameViewDrawThread.setDirection(Constants.DIRECTION_DOWN);
 			}else{
 				Toast.makeText(this, R.string.not_allow_move_text, 800).show();
 			}
 		}else if(e1.getY() - e2.getY() > 60){
-			if(this.movementChecker.canMove(this.box.getState(), Constants.DIRECTION_UP)){
+			if(this.movementChecker.canMove_v2(this.box.getState(), Constants.DIRECTION_UP)){
 				System.out.println("up");
 				this.gameView.gameViewDrawThread.setDirection(Constants.DIRECTION_UP);
 			}else{

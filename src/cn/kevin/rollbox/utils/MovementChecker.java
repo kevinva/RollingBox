@@ -26,6 +26,102 @@ public class MovementChecker {
 		}
 	}
 	
+	public boolean canMove_v2(int boxState, int preDirection){	
+		Box box = this.gameActivity.box;
+		int[] rows = box.getRows();
+		int[] cols = box.getCols();
+		int[] tempRows = new int[]{rows[0], rows[1]};
+		int[] tempCols = new int[]{cols[0], cols[1]};
+		if(boxState == Constants.BOX_STATE_VERTICAL){
+			switch(preDirection){
+			case Constants.DIRECTION_UP:
+				tempRows[0]--;
+				tempRows[1] -= 2;
+				break;
+			case Constants.DIRECTION_DOWN:
+				tempRows[0]++;
+				tempRows[1] += 2;
+				break;				
+			case Constants.DIRECTION_LEFT:
+				tempCols[0]--;
+				tempCols[1] -= 2;
+				break;
+			case Constants.DIRECTION_RIGHT:
+				tempCols[0]++;
+				tempCols[1] += 2;
+				break;
+			}
+		}else if(boxState == Constants.BOX_STATE_HORIZONTAL_X){
+			switch(preDirection){
+			case Constants.DIRECTION_UP:
+				tempRows[0]--;
+				tempRows[1]--;
+				break;
+			case Constants.DIRECTION_DOWN:
+				tempRows[0]++;
+				tempRows[1]++;
+				break;				
+			case Constants.DIRECTION_LEFT:
+				if(tempCols[0] < tempCols[1]){
+					tempCols[0]--;
+					tempCols[1] -= 2;
+				}else{
+					tempCols[0] -= 2;
+					tempCols[1]--;
+				}
+				break;
+			case Constants.DIRECTION_RIGHT:
+				if(tempCols[0] < tempCols[1]){
+					tempCols[0] += 2;
+					tempCols[1]++;
+				}else{
+					tempCols[0]++;
+					tempCols[1] += 2;
+				}
+				break;
+			}
+		}else if(boxState == Constants.BOX_STATE_HORIZONTAL_Z){
+			switch(preDirection){
+			case Constants.DIRECTION_UP:
+				if(tempRows[0] < tempRows[1]){
+					tempRows[0]--;
+					tempRows[1] -= 2;
+				}else{
+					tempRows[0] -= 2;
+					tempRows[1]--;
+				}
+				break;
+			case Constants.DIRECTION_DOWN:
+				if(tempRows[0] < tempRows[1]){
+					tempRows[0] += 2;
+					tempRows[1]++;
+				}else{
+					tempRows[0]++;
+					tempRows[1] += 2;
+				}
+				break;				
+			case Constants.DIRECTION_LEFT:
+				tempCols[0]--;
+				tempCols[1]--;
+				break;
+			case Constants.DIRECTION_RIGHT:
+				tempCols[0]++;
+				tempCols[1]++;
+				break;
+			}
+		}
+		
+		ArrayList<String[]> currentMap = this.gameActivity.currentMap;
+		String[] line1 = currentMap.get(tempRows[0]);
+		String[] line2 = currentMap.get(tempRows[1]);
+		//System.out.println(line1[tempCols[0]] + ", " + line1[tempCols[1]] + ", " + line2[tempCols[0]] + ", " + line2[tempCols[1]]);
+		if(line1[tempCols[0]].equals("0") || line1[tempCols[1]].equals("0")	|| line2[tempCols[0]].equals("0") || line2[tempCols[1]].equals("0")){
+			return false;
+		}
+
+		return true;
+	}
+	
 	public boolean canMove(int boxState, int direction){
 		boolean flag = true;
 		Box box = this.gameActivity.box;

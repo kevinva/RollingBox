@@ -20,7 +20,7 @@ public class GameViewDrawThread extends Thread {
 		this.gameView = v;
 		this.flag = true;
 		this.direction = d;
-		this.span1 = 120;
+		this.span1 = 100;
 		this.span = 10;
 	}
 	
@@ -162,7 +162,9 @@ public class GameViewDrawThread extends Thread {
 				}
 			}
 			
+			System.out.println("Box:" + this.gameView.gameActivity.box);
 			
+			//胜利过关
 			if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_VERTICAL &&
 					tempRows[0] == this.gameView.endPointRow && tempCols[0] == this.gameView.endPonitCol){
 				this.gameView.gameActivity.mHandler.sendEmptyMessage(Constants.MESSAGE_LEVEL_CLEAR);
@@ -208,7 +210,7 @@ public class GameViewDrawThread extends Thread {
 			}
 		}
 		this.direction = -1; //每次翻动之后direction都归-1
-		System.out.println("Box:" + this.gameView.gameActivity.box);
+		
 	}
 
 	public boolean isFlag() {

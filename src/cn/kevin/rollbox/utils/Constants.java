@@ -5,6 +5,7 @@ import cn.kevin.rollbox.R;
 public class Constants {
 	
 	public static final int TOTAL_LEVEL_COUNT = 37;
+	public static int LEVEL_COUNT_PER_PAGE = 10;	
 	
 	public static final int BOX_STATE_VERTICAL = 0;   //∑ΩøÈ ˙¡¢
 	public static final int BOX_STATE_HORIZONTAL_X = 1; //∑ΩøÈ—ÿx÷·∫·Œ‘
@@ -90,5 +91,8 @@ public class Constants {
 		R.drawable.box_z_6,
 		R.drawable.box_z
 	};
+	
+	public static String KEY_MAP_INDEX = "map_index";	
+	
 
 }

@@ -20,12 +20,11 @@ import android.widget.LinearLayout;
 import android.widget.ViewFlipper;
 import cn.kevin.rollbox.R;
 import cn.kevin.rollbox.utils.Constants;
+import cn.kevin.rollbox.utils.MapList;
 
 public class LevelActivity extends Activity implements OnGestureListener, OnClickListener{
 		
-	public static String KEY_MAP_INDEX = "map_index";
-	
-	private static int BUTTON_COUNT_PER_PAGE = 10;	
+
 	private ViewFlipper flipper;
 	private GestureDetector detector;
 	private Button backBtn;
@@ -45,8 +44,8 @@ public class LevelActivity extends Activity implements OnGestureListener, OnClic
 	}
 	
 	private void initLayout(){	
-        int temp = Constants.TOTAL_LEVEL_COUNT / BUTTON_COUNT_PER_PAGE;
-        int remain = Constants.TOTAL_LEVEL_COUNT % BUTTON_COUNT_PER_PAGE;
+        int temp = Constants.TOTAL_LEVEL_COUNT / Constants.LEVEL_COUNT_PER_PAGE;
+        int remain = Constants.TOTAL_LEVEL_COUNT % Constants.LEVEL_COUNT_PER_PAGE;
         if(remain != 0){
         	temp++;
         }
@@ -59,10 +58,10 @@ public class LevelActivity extends Activity implements OnGestureListener, OnClic
 				if(remain != 0){
 					this.flipper.addView(this.createPageView(remain));
 				}else{
-					this.flipper.addView(createPageView(BUTTON_COUNT_PER_PAGE));
+					this.flipper.addView(createPageView(Constants.LEVEL_COUNT_PER_PAGE));
 				}
 			}else{
-				this.flipper.addView(createPageView(BUTTON_COUNT_PER_PAGE));
+				this.flipper.addView(createPageView(Constants.LEVEL_COUNT_PER_PAGE));
 			}
 		}
 		
@@ -120,9 +119,7 @@ public class LevelActivity extends Activity implements OnGestureListener, OnClic
 		// TODO Auto-generated method stub
 		System.out.println("onDown");
 		return true;
-	}
-
-	
+	}	
 	
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
 			float velocityY) {
@@ -188,7 +185,7 @@ public class LevelActivity extends Activity implements OnGestureListener, OnClic
 			finish();
 		}else{
 			int found = -1;
-			int startIndex = (this.currentPage - 1) * BUTTON_COUNT_PER_PAGE;
+			int startIndex = (this.currentPage - 1) * Constants.LEVEL_COUNT_PER_PAGE;
 			for(int i = startIndex; i < this.indexCount; i++){
 				Button btn = this.buttonList.get(i);
 				if(btn == clicked){
@@ -197,8 +194,13 @@ public class LevelActivity extends Activity implements OnGestureListener, OnClic
 				}
 			}
 			
+			if(found < 0 || found > MapList.maps.length - 1){
+				return;
+			}
+
+
 			Intent intent = new Intent(this, GameActivity.class);
-			intent.putExtra(KEY_MAP_INDEX, found);
+			intent.putExtra(Constants.KEY_MAP_INDEX, found);
 			this.startActivity(intent);
 		}
 
