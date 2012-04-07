@@ -1,8 +1,11 @@
 package cn.kevin.rollbox.thread;
 
+import java.util.Iterator;
+
 import android.graphics.Canvas;
 import android.view.SurfaceHolder;
 import cn.kevin.rollbox.R;
+import cn.kevin.rollbox.data_model.Switch;
 import cn.kevin.rollbox.utils.Constants;
 import cn.kevin.rollbox.utils.MovementChecker;
 import cn.kevin.rollbox.view.GameView;
@@ -34,22 +37,19 @@ public class GameViewDrawThread extends Thread {
 			if(direction == Constants.DIRECTION_UP){
 				if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_VERTICAL){
 					this.rollingBox(Constants.box_y_z_up, false);
-					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_Z);
-					
+					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_Z);					
 					tempRows[0]--;
 					tempRows[1] -= 2;	
 					
 				}else if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_HORIZONTAL_X){
 					this.rollingBox(Constants.box_x_up, false);
-					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_X);
-					
+					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_X);					
 					tempRows[0]--;
 					tempRows[1]--;	
 					
 				}else if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_HORIZONTAL_Z){
 					this.rollingBox(Constants.box_y_z_down, true);
-					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_VERTICAL);
-					
+					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_VERTICAL);					
 					if(tempRows[0] < tempRows[1]){
 						tempRows[0]--;
 						tempRows[1] -= 2;
@@ -60,21 +60,18 @@ public class GameViewDrawThread extends Thread {
 					
 				}
 				
-				if(MovementChecker.getInstance(this.gameView.gameActivity).moveToRoundSwitch()){
-					
-				}
+				this.refreshSwitchAndBridge();
+				
 			}else if(direction == Constants.DIRECTION_LEFT){
 				if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_VERTICAL){
 					this.rollingBox(Constants.box_y_x_left, false);
-					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_X);
-					
+					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_X);					
 					tempCols[0]--;
 					tempCols[1] -= 2;	
 					
 				}else if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_HORIZONTAL_X){
 					this.rollingBox(Constants.box_y_x_right, true);
-					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_VERTICAL);
-					
+					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_VERTICAL);					
 					if(tempCols[0] < tempCols[1]){
 						tempCols[0]--;
 						tempCols[1] -= 2;
@@ -85,31 +82,30 @@ public class GameViewDrawThread extends Thread {
 					
 				}else if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_HORIZONTAL_Z){
 					this.rollingBox(Constants.box_z_left, false);
-					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_Z);
-					
+					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_Z);					
 					tempCols[0]--;
 					tempCols[1]--;
 					
 				}
+				
+				this.refreshSwitchAndBridge();
+				
 			}else if(direction == Constants.DIRECTION_DOWN){
 				if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_VERTICAL){
 					this.rollingBox(Constants.box_y_z_down, false);
-					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_Z);
-					
+					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_Z);					
 					tempRows[0]++;
 					tempRows[1] += 2;	
 					
 				}else if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_HORIZONTAL_X){
 					this.rollingBox(Constants.box_x_up, true);
-					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_X);
-					
+					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_X);					
 					tempRows[0]++;
 					tempRows[1]++;
 					
 				}else if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_HORIZONTAL_Z){
 					this.rollingBox(Constants.box_y_z_up, true);
-					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_VERTICAL);
-					
+					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_VERTICAL);					
 					if(tempRows[0] < tempRows[1]){
 						tempRows[0] += 2;
 						tempRows[1]++;
@@ -119,18 +115,19 @@ public class GameViewDrawThread extends Thread {
 					}
 					
 				}
+				
+				this.refreshSwitchAndBridge();
+				
 			}else if(direction == Constants.DIRECTION_RIGHT){
 				if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_VERTICAL){
 					this.rollingBox(Constants.box_y_x_right, false);
-					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_X);
-					
+					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_X);					
 					tempCols[0]++;
 					tempCols[1] += 2;
 					
 				}else if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_HORIZONTAL_X){
 					this.rollingBox(Constants.box_y_x_left, true);
-					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_VERTICAL);
-					
+					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_VERTICAL);					
 					if(tempCols[0] < tempCols[1]){
 						tempCols[0] += 2;
 						tempCols[1]++;
@@ -141,11 +138,13 @@ public class GameViewDrawThread extends Thread {
 					
 				}else if(this.gameView.gameActivity.box.getState() == Constants.BOX_STATE_HORIZONTAL_Z){
 					this.rollingBox(Constants.box_z_left, true);
-					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_Z);
-					
+					this.gameView.gameActivity.box.setState(Constants.BOX_STATE_HORIZONTAL_Z);					
 					tempCols[0]++;
 					tempCols[1]++;
 				}
+				
+				this.refreshSwitchAndBridge();
+				
 			}else{
 				c = null;
 				try{
@@ -166,6 +165,7 @@ public class GameViewDrawThread extends Thread {
 					}
 				}
 			}
+			
 			
 			//System.out.println("Box:" + this.gameView.gameActivity.box);
 			
@@ -217,6 +217,37 @@ public class GameViewDrawThread extends Thread {
 		this.direction = -1; //每次翻动之后direction都归-1
 		
 		System.out.println("Box:" + this.gameView.gameActivity.box);
+	}
+	
+	private void refreshSwitchAndBridge(){
+		int[] tempRows = this.gameView.gameActivity.box.getRows();
+		int[] tempCols = this.gameView.gameActivity.box.getCols();		
+		if(MovementChecker.getInstance(this.gameView.gameActivity).moveToRoundSwitch() ||
+				MovementChecker.getInstance(this.gameView.gameActivity).moveToXSwitch()){
+			Iterator<Switch> itera = this.gameView.gameActivity.switchList.iterator();
+			Switch found = null;
+			while(itera.hasNext()){
+				Switch s = itera.next();
+				if(tempRows[0] == s.getRow() || tempRows[1] == s.getRow()){
+					if(tempCols[0] == s.getCol() || tempCols[1] == s.getCol()){
+						found = s;
+						break;
+					}
+				}
+			}
+			
+			if(found != null){
+				if(!found.isPressed()){
+					//打开桥
+					found.openBridge(this.gameView.gameActivity.currentMap);
+					found.setPressed(true);
+				}else{
+					//关闭桥
+					found.closeBridge(this.gameView.gameActivity.currentMap);
+					found.setPressed(false);
+				}
+			}
+		}
 	}
 
 	public boolean isFlag() {

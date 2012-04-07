@@ -18,6 +18,13 @@ public class Bridge {
 		this.list = list;
 	}
 	
+	public String toString(){
+		StringBuilder builder = new StringBuilder();
+		for(Tuple t: list){
+			builder.append("(" + t.row + ", " + t.col + ")");
+		}
+		return builder.toString();
+	}
 	
 	
 }

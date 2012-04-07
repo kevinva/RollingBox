@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -37,7 +36,6 @@ public class GameActivity extends Activity implements OnGestureListener{
 	public Box box;
 	public ArrayList<String[]> currentMap;
 	public ArrayList<Switch> switchList;
-	public HashMap<Switch, Bridge> swtichBridge;
 	
 	public Handler mHandler = new Handler(){
 		
@@ -59,7 +57,7 @@ public class GameActivity extends Activity implements OnGestureListener{
 		if(bundle != null){
 			this.detector = new GestureDetector(this);
 			this.currentMapIndex = bundle.getInt(Constants.KEY_MAP_INDEX);
-			this.swtichBridge = new HashMap<Switch, Bridge>();
+			this.switchList = new ArrayList<Switch>();
 			
 			System.out.println("current map index: " + currentMapIndex);
 			
@@ -69,7 +67,7 @@ public class GameActivity extends Activity implements OnGestureListener{
 	}
 	
 	private void initGameView(int index){
-		this.swtichBridge.clear();
+		this.switchList.clear();
 		this.movementChecker = MovementChecker.getInstance(this);
 		this.currentMap = this.loadMaps(index);
 		this.loadConfig(index);
@@ -140,13 +138,14 @@ public class GameActivity extends Activity implements OnGestureListener{
 					while((line = br.readLine()) != null){						
 						String[] temp = line.split(":");
 						if(temp.length == 2){
-							if(temp[0].equals("Switch")){
+							if(temp[0].equals("Switch->Bridge")){
 								this.buildSwitchAndBridges(temp[1]);
 							}
 						}
-					}
+					}					
+
+					System.out.println("SwitchBridge size:" + this.switchList.size());
 					
-					System.out.println("SwitchBridge count: " + this.swtichBridge.size());
 				}catch(IOException e){
 					e.printStackTrace();
 				}finally{
@@ -182,30 +181,10 @@ public class GameActivity extends Activity implements OnGestureListener{
 			String[] switchPosition = temp[0].split(",");
 			Switch s = new Switch(Integer.parseInt(switchPosition[0]), Integer.parseInt(switchPosition[1]), false, bridge);
 			
-			this.swtichBridge.put(s, bridge);
+			this.switchList.add(s);
 		}
-	}
-	
-	/*
-	private ArrayList<Switch> getSwitch(){
-		ArrayList<Switch> list = new ArrayList<Switch>();		
-		int rows = currentMap.size();
-		int cols = currentMap.get(0).length;
-		for(int i = 0; i < rows; i++){
-			String[] line = this.currentMap.get(i);
-			for(int j = 0; j < cols; j++){
-				if(line[j].equals("2")){
-					Switch s = new Switch(i, j, Constants.BRICK_SWITCH_ROUND, false);
-					list.add(s);
-				}else if(line[j].equals("3")){
-					Switch s2 = new Switch(i, j, Constants.BRICK_SWITCH_X, false);
-					list.add(s2);
-				}
-			}
-		}
-		return list;
-	}
-	*/
+	}	
+
 	
 	private void initBox(){
 		int rows = currentMap.size();

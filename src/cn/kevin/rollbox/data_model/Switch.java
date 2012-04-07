@@ -1,5 +1,7 @@
 package cn.kevin.rollbox.data_model;
 
+import java.util.ArrayList;
+
 public class Switch {
 	
 	private int row;
@@ -46,6 +48,20 @@ public class Switch {
 		this.brige = brige;
 	}
 	
+	public void openBridge(ArrayList<String[]> gameMap){
+		ArrayList<Tuple> list = this.brige.getList();
+		for(Tuple t: list){
+			String[] row = gameMap.get(t.row);
+			row[t.col] = "5";
+		}
+	}
 	
+	public void closeBridge(ArrayList<String[]> gameMap){
+		ArrayList<Tuple> list = this.brige.getList();
+		for(Tuple t: list){
+			String[] row = gameMap.get(t.row);
+			row[t.col] = "0";
+		}
+	}
 	
 }
