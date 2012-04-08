@@ -26,13 +26,13 @@ public class MovementChecker {
 		}
 	}
 	
-	public boolean canMove_v2(int boxState, int preDirection){	
+	public boolean canMove_v2(int preDirection){	
 		Box box = this.gameActivity.box;
 		int[] rows = box.getRows();
 		int[] cols = box.getCols();
 		int[] tempRows = new int[]{rows[0], rows[1]};
 		int[] tempCols = new int[]{cols[0], cols[1]};
-		if(boxState == Constants.BOX_STATE_VERTICAL){
+		if(box.getState() == Constants.BOX_STATE_VERTICAL){
 			switch(preDirection){
 			case Constants.DIRECTION_UP:
 				tempRows[0]--;
@@ -51,7 +51,7 @@ public class MovementChecker {
 				tempCols[1] += 2;
 				break;
 			}
-		}else if(boxState == Constants.BOX_STATE_HORIZONTAL_X){
+		}else if(box.getState() == Constants.BOX_STATE_HORIZONTAL_X){
 			switch(preDirection){
 			case Constants.DIRECTION_UP:
 				tempRows[0]--;
@@ -80,7 +80,7 @@ public class MovementChecker {
 				}
 				break;
 			}
-		}else if(boxState == Constants.BOX_STATE_HORIZONTAL_Z){
+		}else if(box.getState() == Constants.BOX_STATE_HORIZONTAL_Z){
 			switch(preDirection){
 			case Constants.DIRECTION_UP:
 				if(tempRows[0] < tempRows[1]){
@@ -118,7 +118,16 @@ public class MovementChecker {
 		if(line1[tempCols[0]].equals("0") || line1[tempCols[1]].equals("0")	|| line2[tempCols[0]].equals("0") || line2[tempCols[1]].equals("0")){
 			return false;
 		}
-
+		
+		
+		//当遇到易碎砖块时
+		if(tempCols[0] == tempCols[1] && tempRows[0] == tempRows[1]){
+			if(line1[tempCols[0]].equals("4")){
+				return false;
+			}
+		}
+		
+		
 		return true;
 	}
 	
@@ -154,7 +163,8 @@ public class MovementChecker {
 			return false;
 		}
 		
-	}
+	}	
+
 	
 	/*
 	public boolean canMove(int boxState, int direction){

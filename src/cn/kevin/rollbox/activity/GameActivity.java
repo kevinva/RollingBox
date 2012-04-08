@@ -20,7 +20,6 @@ import cn.kevin.rollbox.R;
 import cn.kevin.rollbox.data_model.Box;
 import cn.kevin.rollbox.data_model.Bridge;
 import cn.kevin.rollbox.data_model.Switch;
-import cn.kevin.rollbox.data_model.Tuple;
 import cn.kevin.rollbox.utils.Constants;
 import cn.kevin.rollbox.utils.MapList;
 import cn.kevin.rollbox.utils.MovementChecker;
@@ -133,15 +132,49 @@ public class GameActivity extends Activity implements OnGestureListener{
 				InputStreamReader reader = new InputStreamReader(is);
 				BufferedReader br = new BufferedReader(reader);
 				String line = null;
-
+				Switch s = null;
 				try{
 					while((line = br.readLine()) != null){						
-						String[] temp = line.split(":");
-						if(temp.length == 2){
-							if(temp[0].equals("Switch->Bridge")){
-								this.buildSwitchAndBridges(temp[1]);
+						if(line.equals("[Switch")){
+							s = new Switch();
+						}else if(line.equals("]")){
+							if(s != null){
+								this.switchList.add(s);
+							}
+						}else{
+							if(line.startsWith("type=")){
+								if(s != null){
+									String[] tmp1 = line.split("=");
+									if(tmp1[1].equals("close;open") || tmp1[1].equals("open;close")){
+										s.setType(Constants.SWITCH_CLOSE_OR_OPEN);
+									}else if(tmp1[1].equals("close")){	//close可控制桥阻断
+										s.setType(Constants.SWITCH_CLOSE);
+									}else if(tmp1[1].equals("open")){ //open表示可控制桥连通
+										s.setType(Constants.SWITCH_OPEN);
+									}
+								}
+							}else if(line.startsWith("position=")){
+								if(s != null){
+									String[] tmp2 = line.split("=");
+									String[] tmp3 = tmp2[1].split(",");
+									s.setRow(Integer.parseInt(tmp3[0]));
+									s.setCol(Integer.parseInt(tmp3[1]));
+								}
+							}else if(line.startsWith("bridge=")){
+								if(s != null){
+									String[] tmp4 = line.split("=");
+									String[] tmp5 = tmp4[1].split("\\|");
+									ArrayList<Bridge> bridges = new ArrayList<Bridge>();
+									for(String str: tmp5){
+										String[] tmp6 = str.split(",");
+										Bridge b = new Bridge(Integer.parseInt(tmp6[0]), Integer.parseInt(tmp6[1]));
+										bridges.add(b);
+									}
+									s.setBridges(bridges);
+								}
 							}
 						}
+
 					}					
 
 					System.out.println("SwitchBridge size:" + this.switchList.size());
@@ -164,25 +197,6 @@ public class GameActivity extends Activity implements OnGestureListener{
 			}
 		}
 
-	}
-	
-	private void buildSwitchAndBridges(String conf){
-		String[] temp = conf.split("->");
-		if(temp.length == 2){			
-			String[] bridges = temp[1].split("\\|");			
-			ArrayList<Tuple> tuples = new ArrayList<Tuple>();
-			for(int i = 0; i < bridges.length; i++){
-				String[] bridgePosition = bridges[i].split(",");					
-				Tuple t = new Tuple(Integer.parseInt(bridgePosition[0]), Integer.parseInt(bridgePosition[1]));
-				tuples.add(t);
-			}
-			Bridge bridge = new Bridge(tuples);		
-			
-			String[] switchPosition = temp[0].split(",");
-			Switch s = new Switch(Integer.parseInt(switchPosition[0]), Integer.parseInt(switchPosition[1]), false, bridge);
-			
-			this.switchList.add(s);
-		}
 	}	
 
 	
@@ -226,28 +240,28 @@ public class GameActivity extends Activity implements OnGestureListener{
 		// TODO Auto-generated method stub
 
 		if(e1.getX() - e2.getX() < -60){
-			if(this.movementChecker.canMove_v2(this.box.getState(), Constants.DIRECTION_RIGHT)){
+			if(this.movementChecker.canMove_v2(Constants.DIRECTION_RIGHT)){
 				System.out.println("right");
 				this.gameView.gameViewDrawThread.setDirection(Constants.DIRECTION_RIGHT);
 			}else{
 				Toast.makeText(this, R.string.not_allow_move_text, 800).show();
 			}
 		}else if(e1.getX() - e2.getX() > 60){
-			if(this.movementChecker.canMove_v2(this.box.getState(), Constants.DIRECTION_LEFT)){
+			if(this.movementChecker.canMove_v2(Constants.DIRECTION_LEFT)){
 				System.out.println("left");
 				this.gameView.gameViewDrawThread.setDirection(Constants.DIRECTION_LEFT);
 			}else{
 				Toast.makeText(this, R.string.not_allow_move_text, 800).show();
 			}
 		}else if(e1.getY() - e2.getY() < -60){
-			if(this.movementChecker.canMove_v2(this.box.getState(), Constants.DIRECTION_DOWN)){
+			if(this.movementChecker.canMove_v2(Constants.DIRECTION_DOWN)){
 				System.out.println("down");
 				this.gameView.gameViewDrawThread.setDirection(Constants.DIRECTION_DOWN);
 			}else{
 				Toast.makeText(this, R.string.not_allow_move_text, 800).show();
 			}
 		}else if(e1.getY() - e2.getY() > 60){
-			if(this.movementChecker.canMove_v2(this.box.getState(), Constants.DIRECTION_UP)){
+			if(this.movementChecker.canMove_v2(Constants.DIRECTION_UP)){
 				System.out.println("up");
 				this.gameView.gameViewDrawThread.setDirection(Constants.DIRECTION_UP);
 			}else{

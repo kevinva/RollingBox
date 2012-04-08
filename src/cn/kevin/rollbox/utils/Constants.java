@@ -21,6 +21,10 @@ public class Constants {
 	public static final int BRICK_SWITCH_ROUND = 0;
 	public static final int BRICK_SWITCH_X = 1;
 	
+	public static final int SWITCH_CLOSE = 0;  //开关只能关闭桥
+	public static final int SWITCH_OPEN = 1;	//开关只能开启桥
+	public static final int SWITCH_CLOSE_OR_OPEN = 2;  //开关可开启或关闭桥
+	
 	public static final int[] box_y_z_up = new int[]{
 		R.drawable.box_y,
 		R.drawable.box_y_z_up1,

@@ -4,26 +4,41 @@ import java.util.ArrayList;
 
 public class Bridge {
 	
-	private ArrayList<Tuple> list;
+	private int row;
+	private int col;
 	
-	public Bridge(ArrayList<Tuple> arr){
-		this.list = arr;
+	public Bridge(int _row, int _col){
+		this.row = _row;
+		this.col = _col;
 	}
 
-	public ArrayList<Tuple> getList() {
-		return list;
+	public int getRow() {
+		return row;
 	}
 
-	public void setList(ArrayList<Tuple> list) {
-		this.list = list;
+	public void setRow(int row) {
+		this.row = row;
+	}
+
+	public int getCol() {
+		return col;
+	}
+
+	public void setCol(int col) {
+		this.col = col;
 	}
 	
 	public String toString(){
-		StringBuilder builder = new StringBuilder();
-		for(Tuple t: list){
-			builder.append("(" + t.row + ", " + t.col + ")");
+		return "(" + row + ", " + col + ")";
+	}
+	
+	//ÇÅÊÇ·ñ±»×è¶Ï
+	public boolean blocked(ArrayList<String[]> gameMap){
+		String[] line = gameMap.get(row);
+		if(line[col].equals("5")){
+			return false;
 		}
-		return builder.toString();
+		return true;
 	}
 	
 	

@@ -237,15 +237,7 @@ public class GameViewDrawThread extends Thread {
 			}
 			
 			if(found != null){
-				if(!found.isPressed()){
-					//´ò¿ªÇÅ
-					found.openBridge(this.gameView.gameActivity.currentMap);
-					found.setPressed(true);
-				}else{
-					//¹Ø±ÕÇÅ
-					found.closeBridge(this.gameView.gameActivity.currentMap);
-					found.setPressed(false);
-				}
+				found.press(this.gameView.gameActivity.currentMap);
 			}
 		}
 	}
